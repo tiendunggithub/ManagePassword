@@ -97,6 +97,9 @@ class PasswordProvider extends ChangeNotifier {
     
     // 4. Cập nhật danh sách hiển thị
     _passwords.add(entry);
+    if (_passwordsNew.length < 3 ) {
+      _passwordsNew.add(entry);
+    }
     notifyListeners();
   }
 
