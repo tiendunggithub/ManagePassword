@@ -65,6 +65,7 @@ class _MasterBottomNavState extends State<HomeScreen> {
     Center(child: PasswordScreen()),
     const Center(child: Text('Comming soon', style: TextStyle(fontSize: 24))),
     const Center(child: Text('Comming soon', style: TextStyle(fontSize: 24))),
+    Center(child: CreatePasswordScreen()),
   ];
 
   @override
@@ -79,11 +80,18 @@ class _MasterBottomNavState extends State<HomeScreen> {
         // shadowColor: Colors.black,
         backgroundColor: const Color.fromARGB(255, 255, 255, 255)
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: _widgetOptions.elementAt(_selectedIndex)),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            _showAddPasswordDialog(context);
+            // _showAddPasswordDialog(context);
             // CreatePasswordScreen();
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => CreatePasswordScreen()),
+            // );
+            setState(() {
+              _selectedIndex = 4;
+            });
           },
           backgroundColor: AppColors.primary, // Màu xanh như hình
           shape: const CircleBorder(
@@ -132,7 +140,7 @@ class _MasterBottomNavState extends State<HomeScreen> {
       //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
         AnimatedContainer(
           width: 80,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6), // Khoảng cách từ Icon đến viền nền
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6), // Khoảng cách từ Icon đến viền nền
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : Colors.transparent, // Màu nền
             shape: BoxShape.rectangle, // Hoặc BoxShape.rectangle để tạo hình vuông/chữ nhật
@@ -155,7 +163,7 @@ class _MasterBottomNavState extends State<HomeScreen> {
                 label,
                 style: TextStyle(
                   color: isSelected ? AppColors.background : Colors.grey,
-                  fontSize: 12,
+                  fontSize: 13,
                 ),
               ),
             ),
