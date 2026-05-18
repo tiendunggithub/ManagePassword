@@ -40,7 +40,7 @@ class _MasterBottomNavState extends State<HomeScreen> {
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         //Trình quản lý mật khẩu
-        title: Text("---", 
+        title: Text("Quản lý mật khẩu", 
           style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w500)
         ),
         actions: [
@@ -88,11 +88,11 @@ class _MasterBottomNavState extends State<HomeScreen> {
         bottomNavigationBar: BottomAppBar(
           shape:
               CircularNotchedRectangle(), // Tạo lỗ hổng hình tròn để nút FAB lọt vào
-          notchMargin: 1.0, // Khoảng cách giữa nút FAB và thanh nav
+          notchMargin: 10.0, // Khoảng cách giữa nút FAB và thanh nav
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildNavItem(0, Icons.home_outlined, "Home", _selectedIndex),
+              _buildNavItem(0, Icons.home_outlined, "Trang chủ", _selectedIndex),
               _buildNavItem(1, Icons.key_rounded, "Mật khẩu", _selectedIndex),
               const SizedBox(width: 30), // Chỗ trống cho FAB
               _buildNavItem(2, Icons.category, "Danh mục", _selectedIndex),
