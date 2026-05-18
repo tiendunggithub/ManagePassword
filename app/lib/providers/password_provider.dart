@@ -76,7 +76,7 @@ class PasswordProvider extends ChangeNotifier {
   }
 
   // Thêm mật khẩu mới
-  Future<void> addPassword(String service, String user, String plainPass) async {
+  Future<void> addPassword(String service, String user, String plainPass, String? website) async {
     if (_masterKey == null) return;
 
     // 1. Mã hóa mật khẩu thô
@@ -89,6 +89,7 @@ class PasswordProvider extends ChangeNotifier {
       serviceName: service,
       username: user,
       encryptedPassword: encrypted,
+      website: website ?? '',
     );
 
     // 3. Chuyển thành chuỗi JSON và lưu vào két sắt
@@ -114,19 +115,46 @@ class PasswordProvider extends ChangeNotifier {
   }
 
   // Xóa mật khẩu theo ID
-Future<void> deletePassword(String id) async {
-  try {
-    // 1. Xóa khỏi Secure Storage
-    await _vault.delete('pwd_$id');
+  Future<void> deletePassword(String id) async {
+    try {
+      // 1. Xóa khỏi Secure Storage
+      await _vault.delete('pwd_$id');
 
-    // 2. Xóa khỏi danh sách trong RAM
-    _passwords.removeWhere((entry) => entry.id == id);
-    
-    // 3. Thông báo cho UI cập nhật lại giao diện
-    notifyListeners();
-  } catch (e) {
-    debugPrint("Lỗi khi xóa mật khẩu: $e");
-    rethrow;
+      // 2. Xóa khỏi danh sách trong RAM
+      _passwords.removeWhere((entry) => entry.id == id);
+      
+      // 3. Thông báo cho UI cập nhật lại giao diện
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Lỗi khi xóa mật khẩu: $e");
+      rethrow;
+    }
   }
-}
+
+  // Thêm phương thức tìm kiếm
+  Future<void> search(String query) async {
+    if (_masterKey == null) return;
+
+    final allData = await _vault.readAll();
+    List<PasswordEntry> loaded = [];
+
+    allData.forEach((key, value) {
+      // Chỉ xử lý các key có tiền tố 'pwd_'
+      if (key.startsWith('pwd_')) {
+        try {
+          // CHỖ SỬA LỖI: value lúc này là chuỗi JSON String
+          final Map<String, dynamic> jsonMap = jsonDecode(value);
+          loaded.add(PasswordEntry.fromJson(jsonMap));
+        } catch (e) {
+          debugPrint("Lỗi giải mã JSON cho key $key: $e");
+        }
+      }
+    });
+
+    _passwords = loaded.where((entry) => 
+      entry.serviceName.toLowerCase().contains(query.toLowerCase()) ||
+      entry.username.toLowerCase().contains(query.toLowerCase())
+    ).toList();
+    notifyListeners();
+  }
 }

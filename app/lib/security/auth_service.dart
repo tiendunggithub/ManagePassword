@@ -44,4 +44,11 @@ Future<bool> authenticate(String password) async {
     final salt = base64.decode(saltBase64);
     return await _crypto.deriveKey(password, salt);
   }
+
+  // Đăng xuất/Xóa dữ liệu (Khi người dùng bấm "Đăng xuất" hoặc "Quên mật khẩu")
+  Future<String?> login() async {
+    return await _vault.read(_kPassHash);
+    
+    // Nếu bạn lưu key session hoặc dữ liệu tạm nào khác, cũng nên xóa ở đây
+  }
 }

@@ -218,6 +218,7 @@ class _MasterBottomNavState extends State<BottomSidebar> {
                         nameController.text,
                         userController.text,
                         passController.text,
+                        '',
                       );
 
                       if (context.mounted) {

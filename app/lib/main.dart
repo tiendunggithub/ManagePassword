@@ -38,7 +38,8 @@ class MyApp extends StatelessWidget {
       home: isRegistered ? LoginScreen() : const RegisterScreen(), 
       routes: {
         '/login': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => HomeScreen(isRegistered),
+        '/forgot-password': (context) => LoginScreen(),
       },
     );
   }
