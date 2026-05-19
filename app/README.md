@@ -52,3 +52,33 @@ Tạo ra file APK phiên bản thử nghiệm. File này cho phép kết nối v
 Sau khi Terminal chạy xong và báo Built build/app/outputs/flutter-apk/..., bạn hãy vào thư mục dự án của mình theo đường dẫn sau để lấy file:
 
 ![alt text](image.png)
+
+# Set icon cho app
+- Tìm ảnh icon phù hợp
+- Vào thư mục app/assets/images
+- Đặt tên file ảnh là icons-key.png
+- Sửa pubspec.yaml
+    flutter_launcher_icons:
+      android: "launcher_icon"
+      ios: true
+      image_path: "assets/images/icons-key.png"
+      min_sdk_android: 21 # android min sdk min:16, default 21
+      web:
+        generate: true
+        image_path: "assets/images/icons-key.png"
+        background_color: "#hexcode"
+        theme_color: "#hexcode"
+      windows:
+        generate: true
+        image_path: "assets/images/icons-key.png"
+        icon_size: 48 # min:48, max:256, default: 48
+      macos:
+        generate: true
+        image_path: "assets/images/icons-key.png"
+
+- Chạy lệnh 2 lệnh sau:
+    flutter pub get
+    dart run flutter_launcher_icons
+
+## Lưu ý:
+    flutter_launcher_icons chỉ hỗ trợ build cho android, còn ios thì cần sử dụng xcode để build
