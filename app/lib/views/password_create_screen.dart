@@ -1,6 +1,9 @@
 import 'dart:ffi' hide Size;
 
 import 'package:app/core/theme/app_colors.dart';
+import 'package:app/core/utils/toast_utils.dart';
+import 'package:app/models/category_model.dart';
+import 'package:app/providers/category_provider.dart';
 import 'package:app/providers/password_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,11 +38,26 @@ int checkPasswordStrength(String password) {
 
 class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
   bool _isHiddenPassword = true;
+  final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _accountController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
+
+  // Giá trị hiện tại của dropdown
+  CategoryEntry? _selectedValue;
   
+  // Danh sách các mục
+  final CategoryProvider categoryProvider = CategoryProvider();
+  List<CategoryEntry> categories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    categoryProvider.loadCategories();
+    categories = categoryProvider.categories;
+  }
+
   // Hàm lấy màu sắc tương ứng với số điểm
   Color _getStrengthColor(int score) {
     switch (score) {
@@ -72,9 +90,16 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     //   _passwordController.text,
     //   _websiteController.text,
     // );
+
     try {
+      if (_selectedValue == null) {
+        ToastUtils.showError("Vui lòng chọn danh mục!");
+        return;
+      }
+      _categoryController.text = _selectedValue!.id;
       // Gọi Provider để mã hóa và lưu vào Secure Storage
       await Provider.of<PasswordProvider>(context, listen: false).addPassword(
+        _categoryController.text,
         _titleController.text,
         _accountController.text,
         _passwordController.text,
@@ -83,14 +108,11 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
 
       if (context.mounted) {
         widget.onGoToSearch(1);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Đã lưu mật khẩu thành công!")),
-        );
+        ToastUtils.showSuccess("Thêm mật khẩu thành công!");
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Lỗi: $e")),
-      );
+      ToastUtils.showError("Lỗi khi thêm mật khẩu!");
+      print("------->>>>>> Error saving password: $e");
     }
   }
 
@@ -113,11 +135,10 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             Text("Tạo mật khẩu mới", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             Text("Lưu trữ thông tin đăng nhập của bạn một cách an toàn và bảo mật", style: TextStyle(fontSize: 14, color: Colors.black)),
             SizedBox(height: 10),
-
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: BoxDecoration(
@@ -149,6 +170,46 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                       ),
                     ),
                     style: TextStyle(fontSize: 14),
+                  ),
+                  Text('Danh mục', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                  SizedBox(height: 5),
+                  TextField(
+                    controller: _categoryController,
+                    decoration: InputDecoration(
+                      hintText: 'Nhập danh mục',
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  DropdownButton<CategoryEntry>(
+                    // Giá trị hiện tại
+                    value: _selectedValue,
+                    // Chữ hiển thị khi chưa chọn gì
+                    hint: const Text('Chọn danh mục'),
+                    // Biểu tượng mũi tên xuống
+                    icon: const Icon(Icons.arrow_drop_down, color: Colors.blue),
+                    // Độ rộng tối đa theo widget cha
+                    isExpanded: true, 
+                    // Đường gạch chân mặc định (ẩn đi bằng Container rỗng)
+                    underline: const SizedBox(), 
+                    // Kiểu chữ cho các item
+                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                    // Hàm lắng nghe sự kiện khi người dùng chọn item mới
+                    onChanged: (CategoryEntry? newValue) {
+                      setState(() {
+                        _selectedValue = newValue;
+                      });
+                    },
+                    // Chuyển đổi danh sách String thành danh sách DropdownMenuItem
+                    items: categories.map<DropdownMenuItem<CategoryEntry>>((CategoryEntry value) {
+                      return DropdownMenuItem<CategoryEntry>(
+                        value: value,
+                        child: Text(value.name),
+                      );
+                    }).toList(),
                   ),
                   SizedBox(height: 20),
                   Text('Tên đăng nhập', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),

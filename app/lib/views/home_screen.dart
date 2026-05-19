@@ -1,6 +1,5 @@
 import 'package:app/core/theme/app_colors.dart';
 import 'package:app/views/dashboard.dart';
-import 'package:app/views/login_screen.dart';
 import 'package:app/views/password_create_screen.dart';
 import 'package:app/views/password_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ class _MasterBottomNavState extends State<HomeScreen> {
 
   // Danh sách các màn hình tương ứng với menu
   List<Widget> get _widgetOptions => <Widget>[
-    Center(child: DashboardScreen()),
+    Center(child: DashboardScreen(onGoToSearch: (index) => _changeTab(index))),
     Center(child: PasswordScreen()),
     const Center(child: Text('Comming soon', style: TextStyle(fontSize: 24))),
     const Center(child: Text('Comming soon', style: TextStyle(fontSize: 24))),
@@ -29,6 +28,19 @@ class _MasterBottomNavState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("------------------- HomeScreen initState --------------------");
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("------------------- HomeScreen dispose --------------------");
   }
 
   @override
@@ -63,43 +75,46 @@ class _MasterBottomNavState extends State<HomeScreen> {
       body: Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: _widgetOptions.elementAt(_selectedIndex)),
       floatingActionButton: isKeyboardOpen 
         ? null 
-        : FloatingActionButton(
-          onPressed: () {
-            // _showAddPasswordDialog(context);
-            // CreatePasswordScreen();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => CreatePasswordScreen()),
-            // );
-            setState(() {
-              _selectedIndex = 4;
-            });
-          },
-          backgroundColor: AppColors.primary, // Màu xanh như hình
-          shape: const CircleBorder(
-            side: BorderSide(
-              color: Colors.white, // Border color
-              width: 3.0, // Border width
-            ),
+        : SizedBox(
+            width: 55,
+            height: 55,
+            child: FittedBox(
+              child: FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 4;
+                  });
+                },
+                backgroundColor: AppColors.primary, // Màu xanh như hình
+                shape: const CircleBorder(
+                  side: BorderSide(
+                    color: Colors.white, // Border color
+                    width: 3.0, // Border width
+                  ),
+                ),
+                child: Icon(Icons.add, size: 30, color: AppColors.background),
+              ),
+            )
           ),
-          child: Icon(Icons.add, size: 30, color: AppColors.background),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        shadowColor: const Color.fromARGB(255, 255, 0, 0),
+        elevation: 15.0,
+        shape:
+            CircularNotchedRectangle(), // Tạo lỗ hổng hình tròn để nút FAB lọt vào
+        notchMargin: 5.0, // Khoảng cách giữa nút FAB và thanh nav
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(0, Icons.home_outlined, "Trang chủ", _selectedIndex),
+            _buildNavItem(1, Icons.key_rounded, "Mật khẩu", _selectedIndex),
+            const SizedBox(width: 50), // Chỗ trống cho FAB
+            _buildNavItem(2, Icons.category, "Danh mục", _selectedIndex),
+            _buildNavItem(3, Icons.person, "Profile", _selectedIndex),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomAppBar(
-          shape:
-              CircularNotchedRectangle(), // Tạo lỗ hổng hình tròn để nút FAB lọt vào
-          notchMargin: 10.0, // Khoảng cách giữa nút FAB và thanh nav
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildNavItem(0, Icons.home_outlined, "Trang chủ", _selectedIndex),
-              _buildNavItem(1, Icons.key_rounded, "Mật khẩu", _selectedIndex),
-              const SizedBox(width: 30), // Chỗ trống cho FAB
-              _buildNavItem(2, Icons.category, "Danh mục", _selectedIndex),
-              _buildNavItem(3, Icons.person, "Profile", _selectedIndex),
-            ],
-          ),
-        ),
+      ),
     );
   }
   // Widget cho từng nút điều hướng

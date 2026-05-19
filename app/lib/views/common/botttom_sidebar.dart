@@ -16,8 +16,8 @@ class _MasterBottomNavState extends State<BottomSidebar> {
   int _selectedIndex = 0;
 
   // Danh sách các màn hình tương ứng với menu
-  static final List<Widget> _widgetOptions = <Widget>[
-    Center(child: DashboardScreen()),
+  List<Widget> get _widgetOptions => <Widget>[
+    Center(child: DashboardScreen(onGoToSearch: (index) => _onItemTapped(index))),
     Center(child: PasswordScreen()),
     const Center(child: Text('Thông báo', style: TextStyle(fontSize: 24))),
     const Center(child: Text('Cá nhân', style: TextStyle(fontSize: 24))),
@@ -215,10 +215,11 @@ class _MasterBottomNavState extends State<BottomSidebar> {
                     try {
                       // Gọi Provider để mã hóa và lưu vào Secure Storage
                       await Provider.of<PasswordProvider>(context, listen: false).addPassword(
+                        'category1',
                         nameController.text,
                         userController.text,
                         passController.text,
-                        '',
+                        'https://google.com'
                       );
 
                       if (context.mounted) {

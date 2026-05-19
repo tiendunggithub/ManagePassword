@@ -76,7 +76,7 @@ class PasswordProvider extends ChangeNotifier {
   }
 
   // Thêm mật khẩu mới
-  Future<void> addPassword(String service, String user, String plainPass, String? website) async {
+  Future<void> addPassword(String categoryId, String service, String user, String plainPass, String? website) async {
     if (_masterKey == null) return;
 
     // 1. Mã hóa mật khẩu thô
@@ -86,6 +86,7 @@ class PasswordProvider extends ChangeNotifier {
     // 2. Tạo đối tượng Model
     final entry = PasswordEntry(
       id: id,
+      categoryId: categoryId,
       serviceName: service,
       username: user,
       encryptedPassword: encrypted,

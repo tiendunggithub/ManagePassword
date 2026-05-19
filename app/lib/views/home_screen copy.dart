@@ -156,6 +156,7 @@ class HomeScreen extends StatelessWidget {
                   try {
                     // Gọi Provider để mã hóa và lưu vào Secure Storage
                     await Provider.of<PasswordProvider>(context, listen: false).addPassword(
+                      'category1',
                       nameController.text,
                       userController.text,
                       passController.text,

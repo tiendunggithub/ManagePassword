@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class PasswordEntry {
   final String id;
+  final String categoryId;
   final String serviceName;
   final String username;
   final String encryptedPassword; // Chuỗi Base64 từ AES-GCM
@@ -9,6 +10,7 @@ class PasswordEntry {
 
   PasswordEntry({
     required this.id,
+    required this.categoryId,
     required this.serviceName,
     required this.username,
     required this.encryptedPassword,
@@ -17,6 +19,7 @@ class PasswordEntry {
 
   Map<String, dynamic> toJson() => {
     'id': id,
+    'categoryId': categoryId,
     'serviceName': serviceName,
     'username': username,
     'encryptedPassword': encryptedPassword,
@@ -25,6 +28,7 @@ class PasswordEntry {
 
   factory PasswordEntry.fromJson(Map<String, dynamic> json) => PasswordEntry(
     id: json['id'],
+    categoryId: json['categoryId'],
     serviceName: json['serviceName'],
     username: json['username'],
     encryptedPassword: json['encryptedPassword'],
