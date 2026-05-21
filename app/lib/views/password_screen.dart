@@ -6,7 +6,7 @@ import '../providers/password_provider.dart';
 
 class PasswordScreen extends StatelessWidget {
   PasswordScreen({super.key});
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   bool _isSearch = false;
 

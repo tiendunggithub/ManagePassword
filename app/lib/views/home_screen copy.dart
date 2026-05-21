@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../providers/password_provider.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<PasswordProvider>();

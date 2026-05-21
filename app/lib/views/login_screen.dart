@@ -9,6 +9,8 @@ import '../providers/password_provider.dart';
 import 'package:app/security/secure_vault.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }

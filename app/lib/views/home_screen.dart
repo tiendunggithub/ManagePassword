@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   bool isRegistered;
-  HomeScreen(this.isRegistered);
+  HomeScreen(this.isRegistered, {super.key});
   @override
   _MasterBottomNavState createState() => _MasterBottomNavState();
 }

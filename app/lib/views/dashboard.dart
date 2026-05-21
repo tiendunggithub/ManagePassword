@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
+                      SizedBox(
                         width: passwords.length.toString().length > 3 ? screenWidth*0.5 : screenWidth*0.7,
                         child: Text('Số lượng mật khẩu được bảo vệ',
                           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18),

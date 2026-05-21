@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../home_screen copy.dart';
 
 class BottomSidebar extends StatefulWidget {
+  const BottomSidebar({super.key});
+
   @override
   _MasterBottomNavState createState() => _MasterBottomNavState();
 }

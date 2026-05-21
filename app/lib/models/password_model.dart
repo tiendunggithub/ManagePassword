@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class PasswordEntry {
   final String id;
   final String categoryId;
